@@ -1,14 +1,12 @@
-# mapboard
+# pictometry
 
 _(work in progress)_
 
-Mapboard provides a pluggable Vue.js component for data-rich mapping applications. It combines the look and feel of [Atlas]() with a more flexible, config-driven API.
-
-![Atlas](http://i.imgur.com/GcZpsgX.png)
+Pictometry provides a pluggable Vue.js component for data-rich mapping applications.
 
 ## Example
 
-See [Simple Example](examples/simple.index.html) for an intended usage of the API.
+See [Simple Example](examples/pictometry.index.html) for an intended usage of the API.
 
 ## Build Setup
 
