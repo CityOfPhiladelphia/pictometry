@@ -1,7 +1,9 @@
 <template>
   <div class="mb-root row collapse"
-       :style="this.$config.rootStyle"
+       id="mb-root"
+       :style="styleObject"
   >
+  <!-- :style="this.$config.rootStyle" -->
     <div id="pict-container"
          :class="this.pictContainerClass"
     >
@@ -19,21 +21,36 @@
 
 <script>
   export default {
-    props: [
-      'apiKey',
-      'secretKey',
-      'orientation',
-    ],
+    data() {
+      const data = {
+        'apiKey': null,
+        'secretKey': null,
+        styleObject: {
+          'position': 'relative',
+          // 'top': '86px',
+          // 'overflow-y': 'auto',
+          'width': '100%',
+          'height': '100%'
+          // 'height': null
+        }
+      };
+      return data;
+    },
     created() {
       this.$IFRAME_ID = 'pictometry-ipa';
-      this.$props.apiKey = this.$config.pictometry.apiKey;
-      this.$props.secretKey = this.$config.pictometry.secretKey;
+      this.apiKey = this.$config.pictometry.apiKey;
+      this.secretKey = this.$config.pictometry.secretKey;
     },
     mounted() {
       // fetch pictometry ipa script
-      const scriptUrl = '//pol.pictometry.com/ipa/v1/embed/host.php' + '?apikey=' + this.apiKey;
+      const scriptUrl = 'https://pol.pictometry.com/ipa/v1/embed/host.php' + '?apikey=' + this.apiKey;
       const self = this;
       $.getScript(scriptUrl, self.init);
+      window.addEventListener('resize', this.handleWindowResize);
+      this.handleWindowResize();
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', this.handleWindowResize);
     },
     computed: {
       cyclomediaActive() {
@@ -58,21 +75,12 @@
         return this.$store.state.map.zoom + 2;
       },
     },
-    watch: {
-      center(nextCenter) {
-        this.$ipa.setLocation({
-          y: nextCenter.lat,
-          x: nextCenter.lng,
-          zoom: this.pictZoom
-        });
-      },
-    },
     methods: {
       init() {
         // construct signed url
         const d = new Date();
         const t = Math.floor(d.getTime() / 1000);
-        const unsignedUrl = 'http://pol.pictometry.com/ipa/v1/load.php' + "?apikey=" + this.apiKey + "&ts=" + t;
+        const unsignedUrl = 'https://pol.pictometry.com/ipa/v1/load.php' + "?apikey=" + this.apiKey + "&ts=" + t;
         const hash = md5(unsignedUrl, this.secretKey);
         const iframeId = this.$IFRAME_ID;
         const signedUrl = unsignedUrl + "&ds=" + hash + "&app_id=" + iframeId;
@@ -83,7 +91,7 @@
         iframe.setAttribute('src', signedUrl);
 
         // create pictometry host
-        const ipa = this.$ipa = new PictometryHost(iframeId, 'http://pol.pictometry.com/ipa/v1/load.php');
+        const ipa = this.$ipa = new PictometryHost(iframeId, 'https://pol.pictometry.com/ipa/v1/load.php');
         this.$store.commit('setPictometryIpa', ipa);
         ipa.ready = this.ipaReady;
       },
@@ -94,94 +102,19 @@
           zoom: this.pictZoom
         });
       },
+      handleWindowResize() {
+        const rootElement = document.getElementById('application');
+        const rootStyle = window.getComputedStyle(rootElement);
+        const rootHeight = rootStyle.getPropertyValue('height');
+        const rootHeightNum = parseInt(rootHeight.replace('px', ''));
+        const topicsHeight = rootHeightNum - 76;
+        console.log('handleWindowResize is running, rootElement:', rootElement, 'rootStyle', rootStyle, 'rootHeight:', rootHeight, 'rootHeightNum', rootHeightNum);
+        this.styleObject.height = topicsHeight.toString() + 'px';
+        // this.styleObject.height = '100%';
+      }
     }, // end of methods
 
 
-      //     didActivateTopic: function (topic) {
-      //       console.log('didActivateTopic is firing with topic: ', topic);
-      //       switch (topic) {
-      //         case 'deeds':
-      //           // turn on DOR Parcels
-      //           ipa.showLayer({
-      //             id: 114828,
-      //             visible: true,
-      //           })
-      //           break;
-      //         case 'zoning':
-      //           // turn on zoning
-      //           ipa.showLayer({
-      //             id: 112230,
-      //             visible: true,
-      //           });
-      //           break;
-      //         case 'water':
-      //           // turn on water Parcels
-      //           ipa.showLayer({
-      //             id: 108982,
-      //             visible: true,
-      //           })
-      //           break;
-      //
-      //         default:
-      //           // turn off DOR parcels
-      //           ipa.showLayer({
-      //             id: 113478,
-      //             visible: false,
-      //           });
-      //           // turn off zoning
-      //           ipa.showLayer({
-      //             id: 112230,
-      //             visible: false,
-      //           });
-      //       }
-      //     },
-      //
-      //     didDeactivateTopic: function (topic) {
-      //       switch (topic) {
-      //         case 'deeds':
-      //           // turn off DOR parcels
-      //           ipa.showLayer({
-      //             id: 114828,
-      //             visible: false,
-      //           });
-      //           break;
-      //
-      //         case 'zoning':
-      //           // turn on zoning
-      //           ipa.showLayer({
-      //             id: 112230,
-      //             visible: false,
-      //           });
-      //           break;
-      //
-      //         case 'water':
-      //           // turn off water
-      //           ipa.showLayer({
-      //             id: 108982,
-      //             visible: false,
-      //           })
-      //
-      //         default:
-      //           // turn off DOR parcels
-      //           ipa.showLayer({
-      //             id: 113478,
-      //             visible: false,
-      //           });
-      //           // turn off zoning
-      //           ipa.showLayer({
-      //             id: 112230,
-      //             visible: false,
-      //           });
-      //       }
-      //     },
-      //
-      //     shapeIds : [],
-      //     circleIds : [],
-      //     cameraIds : [],
-      //
-      //
-      //    }//end of return
-      // })();
 
 
   }; // end of export
@@ -190,8 +123,17 @@
 
 
 <style scoped>
-header.site-header > .row:last-of-type {
+/*header.site-header > .row:last-of-type {
   background: #2176d2;
+}
+*/
+
+/*#application {
+  height: 90%;
+}*/
+
+#mb-root {
+  height: 100%;
 }
 
 #pict-container {
@@ -203,7 +145,7 @@ header.site-header > .row:last-of-type {
   height: 100%;
   width: 100%;
 }
-
+/*
 #search-container {
     float: right;
 }
@@ -222,36 +164,6 @@ header.site-header > .row:last-of-type {
     padding-left: 12px;
     padding-right: 12px;
     height: 100%;
-}
-
-#data-panel > h1 {
-    color: #666;
-}
-
-#data-row-list > a {
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    display: block;
-    font-size: 18px;
-    font-weight: normal;
-    height: 70px;
-    line-height: 45px;
-    /*margin-left: 10px;*/
-    /*margin-right: 10px;*/
-    padding: 10px;
-    /*vertical-align: middle;*/
-    /*text-align: middle;*/
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    margin-bottom: 8px;
-}
-
-#data-row-list > a:hover {
-    background: #fff;
-    color: inherit;
-}
-
-#data-row-list .data-row-link-icon {
-    padding-right: 30px;
 }
 
 .data-row {
@@ -279,7 +191,7 @@ ul {
     margin: 0;
 }
 
-img { max-width: inherit; }
+img { max-width: inherit; }*/
 
 
 </style>

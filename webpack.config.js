@@ -7,7 +7,7 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     filename: 'build.js',
-    library: 'vue-pictometry'
+    library: 'Pictometry'
   },
   module: {
     rules: [
