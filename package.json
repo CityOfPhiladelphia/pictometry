@@ -1,5 +1,5 @@
 {
-  "name": "@cityofphiladelphia/pictometry",
+  "name": "@cityofphiladelphia/vue-pictometry",
   "description": "A Vue.js component for pictometry",
   "version": "0.0.1",
   "author": "City of Philadelphia <maps@phila.gov>",
