@@ -1,4 +1,4 @@
-# pictometry
+# vue-pictometry
 
 _(work in progress)_
 
