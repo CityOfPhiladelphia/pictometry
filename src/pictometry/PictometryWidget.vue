@@ -3,7 +3,6 @@
        id="mb-root"
        :style="styleObject"
   >
-  <!-- :style="this.$config.rootStyle" -->
     <div id="pict-container"
          :class="this.pictContainerClass"
     >
@@ -38,8 +37,8 @@
     },
     created() {
       this.$IFRAME_ID = 'pictometry-ipa';
-      this.apiKey = this.$config.pictometry.apiKey;
-      this.secretKey = this.$config.pictometry.secretKey;
+      this.apiKey = this.$config.pictometrySite.apiKey;
+      this.secretKey = this.$config.pictometrySite.secretKey;
     },
     mounted() {
       // fetch pictometry ipa script
@@ -108,7 +107,7 @@
         const rootHeight = rootStyle.getPropertyValue('height');
         const rootHeightNum = parseInt(rootHeight.replace('px', ''));
         const topicsHeight = rootHeightNum - 76;
-        console.log('handleWindowResize is running, rootElement:', rootElement, 'rootStyle', rootStyle, 'rootHeight:', rootHeight, 'rootHeightNum', rootHeightNum);
+        // console.log('handleWindowResize is running, rootElement:', rootElement, 'rootStyle', rootStyle, 'rootHeight:', rootHeight, 'rootHeightNum', rootHeightNum);
         this.styleObject.height = topicsHeight.toString() + 'px';
         // this.styleObject.height = '100%';
       }
