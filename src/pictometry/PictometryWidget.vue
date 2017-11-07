@@ -74,7 +74,8 @@
         return center;
       },
       pictZoom() {
-        return this.$store.state.map.zoom + 2;
+        return 20;
+        // return this.$store.state.map.zoom + 2;
       },
     },
     methods: {
