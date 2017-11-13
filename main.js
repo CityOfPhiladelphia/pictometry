@@ -1,5 +1,6 @@
-const GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
+console.log = console.info = console.debug = console.error = function () {};
 
+const GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 
 Pictometry.default({
   // rootStyle: {
