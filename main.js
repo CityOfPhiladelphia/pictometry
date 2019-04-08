@@ -1,12 +1,10 @@
 console.log = console.info = console.debug = console.error = function () {};
 
-const GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
+// const GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@f1802a4bef28265e2add0e94ce823852a5341ad6/config.js';
 
 Pictometry.default({
-  // rootStyle: {
-  //   height: '600px'
-  // },
-  baseConfig: '//rawgit.com/rbrtmrtn/mapboard-base-config/e2a99da8f5d1c66a74a288bf94ac00944efdf5cd/config.js',
+  baseConfig: BASE_CONFIG_URL,
   pictometry: {
     enabled: true
   }
