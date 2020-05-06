@@ -65,6 +65,7 @@ viewerboard({
   },
   map: {
     type: 'leaflet',
+    center: [-75.163471, 39.953338],
     containerClass: 'map-container',
     containerClassWCyclo: 'map-container',
     shouldInitialize: false,
