@@ -11,7 +11,7 @@ if (host === 'atlas-dev.phila.gov.s3-website-us-east-1.amazonaws.com') {
 
 import viewerboard from '@phila/viewerboard/src/main.js';
 // const baseConfigUrl = null;
-const baseConfigUrl = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
+// const baseConfigUrl = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/pde_base_config@3cb644750f4db8619a5b41f5369d1e280678f7bb/config.js';
 
 viewerboard({
   app: {
@@ -35,6 +35,7 @@ viewerboard({
     apiKey: pictApiKey,
     secretKey: pictSecretKey,
   },
+  initialView: ['imagery'],
   geocoder: {
     url: function (input) {
       var inputEncoded = encodeURIComponent(input);
@@ -63,6 +64,9 @@ viewerboard({
     placeholder: 'Search for an address',
   },
   map: {
+    type: 'leaflet',
+    containerClass: 'map-container',
+    containerClassWCyclo: 'map-container',
     shouldInitialize: false,
     zoom: 13,
   },
